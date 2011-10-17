@@ -112,7 +112,7 @@ new No_Stampede_Action_Server();
 				return false;
 			
 			if( !$this->get_action_lock() ) {
-				if(!(defined('DOING_BACKGROUND_ACTION') || DOING_BACKGROUND_ACTION)) {
+				if(!(defined('DOING_BACKGROUND_ACTION') && DOING_BACKGROUND_ACTION)) {
 					while($this->max_tries > 0 && !$this->action_has_completed()) {
 						$this->max_tries--;
 						usleep($this->sleep_time);
@@ -123,10 +123,10 @@ new No_Stampede_Action_Server();
 			call_user_func_array( $this->callback, $this->params );
 			
 			
-			return true;
 			//set the action lock to expire in time_til_next_run seconds
 			//time_til_next_run should be 0 to make this action only happen once
 			set_transient($this->get_lock_name(), 'completed', $this->time_til_next_run);
+			return true;
 		}
 		
 		private function action_has_completed() {
@@ -134,7 +134,6 @@ new No_Stampede_Action_Server();
 		}
 		
 		private function get_action_lock() {
-			return true;
 			//check if action is already locked or the lock is completed
 			if($this->action_has_lock()) {
 				if( $this->is_lock_owner() )
@@ -153,7 +152,7 @@ new No_Stampede_Action_Server();
 		}
 		
 		private function is_lock_owner() {
-			return $this->lock_key = get_transient($this->get_lock_name());
+			return $this->lock_key == get_transient($this->get_lock_name());
 		}
 		
 		private function get_lock_name() {
