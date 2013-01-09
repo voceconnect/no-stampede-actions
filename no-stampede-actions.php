@@ -102,7 +102,7 @@ new No_Stampede_Action_Server();
 		}
 
 		public function spawn_server() {
-			$server_url = home_url( '/?nsa_actions_request' );
+			$server_url = admin_url( 'admin-post.php' );
 			wp_remote_post( $server_url, array( 'body' => array( '_nsa_action' => $this->lock_key, 'key' => $this->key ), 'timeout' => 0.01, 'blocking' => false, 'sslverify' => apply_filters( 'https_local_ssl_verify', true ) ) );
 		}
 
