@@ -135,7 +135,7 @@ new No_Stampede_Action_Server();
 		
 		private function get_action_lock() {
 			//check if action is already locked or the lock is completed
-			if($this->action_has_lock()) {
+			if($this->action_has_lock() && !$this->action_has_completed()) {
 				if( $this->is_lock_owner() )
 					return true; //already own it
 				return false; //someone else owns it
