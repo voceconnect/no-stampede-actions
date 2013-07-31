@@ -16,29 +16,34 @@ A WordPress api to kicking off globally singleton actions.  It will lock the act
 
 ### As theme or plugin dependency:
 > After dropping the plugin into the containing theme or plugin, add the following:
-
+```php
+<?php
 	if( ! class_exists( 'NSA_Action' ) ) {
 		require_once( $path_to_nsa_actions . '/no-stampede-actions.php' );
 	}
+```
 
 ## Usage
 
-	function long_request(){
+```php
+<?php
+function long_request(){
+	$val = wp_cache_get( 'long_request_key' );
+	if( $val === false ){
+		nsa_action('long_request')
+			->action_callback( 'long_request_callback', array( 'http://example.com/long-running-request.php' ) )
+			->background_only( false )
+			->max_tries( 10 )
+			->do_action( );
+
 		$val = wp_cache_get( 'long_request_key' );
-		if( $val === false ){
-			nsa_action('long_request')
-				->action_callback( 'long_request_callback', array( 'http://example.com/long-running-request.php' ) )
-				->background_only( false )
-				->max_tries( 10 )
-				->do_action( );
-
-			$val = wp_cache_get( 'long_request_key' );
-		}
-		return $val;
 	}
+	return $val;
+}
 
-	function long_request_callback($url){
-		$content = wp_remote_retrieve_body( wp_remote_get( $url, array( 'timeout' => 30 ) ) );
-		wp_cache_set( 'long_request_key', $content );
-		return $content;
-	}
+function long_request_callback($url){
+	$content = wp_remote_retrieve_body( wp_remote_get( $url, array( 'timeout' => 30 ) ) );
+	wp_cache_set( 'long_request_key', $content );
+	return $content;
+}
+```
