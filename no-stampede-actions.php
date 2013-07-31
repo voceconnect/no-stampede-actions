@@ -118,7 +118,8 @@ new No_Stampede_Action_Server();
 						usleep($this->sleep_time);
 					}
 				}
-				return false;
+				if( $this->action_has_completed() )
+					return false;
 			}
 			call_user_func_array( $this->callback, $this->params );
 			
@@ -181,6 +182,10 @@ new No_Stampede_Action_Server();
 			return $this;
 		}
 
+		public function max_tries( $max_tries ){
+			$this->max_tries = (int) $max_tries;
+			return $this;
+		}
 	}
 	
 // API so you don't have to use "new"
