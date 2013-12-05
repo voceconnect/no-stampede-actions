@@ -1,0 +1,22 @@
+{
+    "name": "voceconnect/no-stampede-actions",
+    "description": "A WordPress api to kick off globally singleton actions.  It will lock the action to prevent other requests from kicking off the same action.",
+    "license": "GPLv2+",
+    "authors": [
+        {
+            "name": "Michael Pretty",
+            "email": "mpretty@voceconnect.com"
+        },
+        {
+            "name": "Kevin Langley",
+            "email": "kevin@voceconnect.com"
+        },
+        {
+            "name": "Curtis Loisel",
+            "email": "curtis@voceconnect.com"
+        }
+    ],
+    "autoload": {
+        "files": ["no-stampede-actions.php"]
+    }
+}
